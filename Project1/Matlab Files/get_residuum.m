@@ -8,6 +8,6 @@ function res = get_residuum(param,sim_param)
     x_star_noise = cell2mat(sim_param(4)).x_star_noise;
     x_sim = gen_sim_data(m, k, d, x0, dt, N);
     errs = x_star_noise - x_sim';
-    errr_sq = errs.^2;
-    res = sum(sum(errr_sq));
+    errs_sq = errs.^2;
+    res = sum(sum(errs_sq));
 end
