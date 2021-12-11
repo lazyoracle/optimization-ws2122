@@ -23,6 +23,17 @@ plot(t(1:end-1), y_df)
 ylabel(Y_LABEL_DIFF);
 xlabel("Time in s");
 
+% fmincon denoised signal
+y_den = get_optim_signal(y_raw);
+
+% Plot denoised signal
+subplot(2, 3, 2);
+plot(t, y_den)
+hold on
+plot(t, y)
+title("Optimization Filter");
+ylabel(Y_LABEL);
+
 % Plot lpf signal
 y_lpf = easy_low_pass(y_raw, 0.6);
 subplot(2, 3, 3);
