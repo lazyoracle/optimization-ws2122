@@ -34,6 +34,15 @@ plot(t, y)
 title("Optimization Filter");
 ylabel(Y_LABEL);
 
+% Plot denoised signal derivative
+y_den_df = diff(y_den)./diff(t);
+subplot(2, 3, 5);
+plot(t(1:end-1), y_den_df)
+hold on
+plot(t(1:end-1), y_df)
+ylabel(Y_LABEL_DIFF);
+xlabel("Time in s");
+
 % Plot lpf signal
 y_lpf = easy_low_pass(y_raw, 0.6);
 subplot(2, 3, 3);
