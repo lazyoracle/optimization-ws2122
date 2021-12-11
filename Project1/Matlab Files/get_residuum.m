@@ -9,5 +9,5 @@ function res = get_residuum(param,sim_param)
     x_sim = gen_sim_data(m, k, d, x0, dt, N);
     errs = x_star_noise - x_sim';
     errr_sq = errs.^2;
-    res = sum(errr_sq);
+    res = sum(sum(errr_sq));
 end
