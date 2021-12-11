@@ -45,7 +45,7 @@ ylabel(Y_LABEL_DIFF);
 xlabel("Time in s");
 
 % Plot lpf signal
-y_lpf = easy_low_pass(y_raw, 0.6);
+y_lpf = easy_low_pass(y_raw, 0.5);
 subplot(2, 3, 3);
 plot(t, y_lpf)
 hold on
