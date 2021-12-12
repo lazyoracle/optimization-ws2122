@@ -6,6 +6,12 @@ Y_LABEL = "Signal Values";
 Y_LABEL_DIFF = "Signal Derivative";
 X_LABEL = "Time in s";
 
+% uncomment for a longer dataset
+% t2 = t + t(end);
+% t = [t t2];
+% y = [y y];
+% y_raw = [y_raw y_raw];
+
 % Plot noisy signal
 subplot(2, 3, 1);
 plot(t, y_raw)
