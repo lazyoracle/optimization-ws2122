@@ -5,6 +5,7 @@ load("measurements.mat");
 Y_LABEL = "Signal Values";
 Y_LABEL_DIFF = "Signal Derivative";
 X_LABEL = "Time in s";
+SMOOTH = 0.7;
 
 % uncomment for a longer dataset
 % t2 = t + t(end);
@@ -31,7 +32,7 @@ ylabel(Y_LABEL_DIFF);
 xlabel("Time in s");
 
 % fmincon denoised signal
-y_den = get_optim_signal(y_raw, t);
+y_den = get_optim_signal(y_raw, t, SMOOTH);
 
 % Plot denoised signal
 subplot(2, 3, 2);
