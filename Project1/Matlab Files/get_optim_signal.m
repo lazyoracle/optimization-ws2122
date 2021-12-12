@@ -31,7 +31,7 @@ function optim_signal = get_optim_signal(y_raw, t)
             end
         end
     end
-
+    A = sparse(A);
 
     optim_signal = fmincon(@(y_den)denoise_obj(y_den,y_raw), ...
         y_den_0, A, b, [], [], [], [], [], ...
