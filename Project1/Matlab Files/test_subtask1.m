@@ -13,7 +13,8 @@ param_0 = [2;4;0.1]; %inital guess for parameters
 
 options = optimoptions('fminunc', ...
     'Display','final-detailed', ...
-    'OptimalityTolerance', 1e-5);
+    'OptimalityTolerance', 1e-15, ...
+    'StepTolerance', 1e-15);
 opt_fun = @(param)get_residuum(param, sim_param); 
 [param_star, fval] = fminunc(opt_fun, param_0, options);
 
