@@ -1,5 +1,6 @@
 clear;
 clearvars;
+clf;
 
 x_0 = [2 0];
 delta = 0.01;
@@ -18,3 +19,21 @@ opt_fun = @(param)get_residuum(param, sim_param);
 
 disp("Best params:");
 disp(param_star);
+
+x_sim_star = gen_sim_data(param_star(1), ...
+    param_star(2), param_star(3), ...
+    x_0, delta, N);
+
+subplot(2, 1, 1);
+plot(x_sim_star(1,:))
+hold on
+plot(x_star_noise.x_star_noise(:,1))
+title("Estimated and Measured x");
+legend('Estimated', 'Measured');
+
+subplot(2, 1, 2);
+plot(x_sim_star(2,:))
+hold on
+plot(x_star_noise.x_star_noise(:,2))
+title("Estimated and Measured x'");
+legend('Estimated', 'Measured');
