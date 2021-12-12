@@ -12,11 +12,22 @@ function optim_signal = get_optim_signal(y_raw, t)
     % b matrix can be diff(t) with some shape adjustments
     b = diff(t);
     b(end + 1) = t(end);
-    A = - eye(meas_size(2));
-    for m = 1:meas_size(2)
-        for n = 1:meas_size(2)
-            if n == m+1
+    b = [b b];
+    A = zeros(2 * meas_size(2), meas_size(2));
+    m_max = size(A, 1);
+    n_max = size(A, 2);
+    for m = 1: m_max
+        for n = 1:n_max
+            if n == m
+                A(m, n) = -1;
+            elseif n == m+1
                 A(m, n) = 1;
+            elseif m > n_max
+                if (m - n_max) == n
+                    A(m, n) = 1;
+                elseif (m - n_max)+1 == n
+                    A(m, n) = -1;
+                end
             end
         end
     end
