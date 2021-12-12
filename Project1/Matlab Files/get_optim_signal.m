@@ -2,8 +2,11 @@ function optim_signal = get_optim_signal(y_raw, t)
     meas_size = size(y_raw);
     y_den_0 = zeros(meas_size);
     options = optimoptions("fmincon", "Display", "final-detailed", ...
-        "OptimalityTolerance", 1e-10, ...
-        "MaxFunctionEvaluations", 1e5);
+        "OptimalityTolerance", 1e-15, ...
+        "MaxFunctionEvaluations", 1e5, ...
+        "ConstraintTolerance", 1e-15, ...
+        "StepTolerance", 1e-15, ...
+        "EnableFeasibilityMode", true);
     
     % A & B matrix for linear inequality constraint
     % We need (f(y2) - f(y1)) / (t2 - t1) <= 1
@@ -15,7 +18,7 @@ function optim_signal = get_optim_signal(y_raw, t)
     b = diff(t);
     b(end + 1) = t(end); % diff(t) is one elem smaller
     b = [b b]; % augment b with itself
-    
+
     A = zeros(2 * meas_size(2), meas_size(2));
     m_max = size(A, 1);
     n_max = size(A, 2);
