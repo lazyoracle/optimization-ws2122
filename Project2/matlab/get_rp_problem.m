@@ -1,6 +1,6 @@
-function rp_problem = get_rp_problem(cost_fun, ref, x0, lb, ub, nonlcon)
-    cost_fun1 = cost_fun(1);
-    cost_fun2 = cost_fun(2);
+function rp_problem = get_rp_problem(cost_fun, ref, x0, lb, ub, nonlcon, options)
+    cost_fun1 = cost_fun{1};
+    cost_fun2 = cost_fun{2};
     dist_to_ref = @(x)norm([cost_fun1(x) - ref(1), cost_fun2(x) - ref(2)]);
     rp_problem.objective = dist_to_ref;
     rp_problem.x0 = x0;
@@ -8,3 +8,4 @@ function rp_problem = get_rp_problem(cost_fun, ref, x0, lb, ub, nonlcon)
     rp_problem.lb = lb;
     rp_problem.ub = ub;
     rp_problem.nonlcon = nonlcon;
+    rp_problem.options = options;
