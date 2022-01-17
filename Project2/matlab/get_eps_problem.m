@@ -3,8 +3,8 @@ function eps_problem = get_eps_problem(cost_fun, eps, x0, lb, ub, nonlcon, optio
     cost_fun2 = cost_fun{2};
 
     function [c,ceq] = constraint(x)
-        c(1) = cost_fun2(x) - eps;
-        c(2) = nonlcon(x);
+        c(1) = cost_fun2(x) - eps; % eps-constraint as nonlcon
+        c(2) = nonlcon(x); % nonlcon for the original problem
         ceq = [];
     end
 
