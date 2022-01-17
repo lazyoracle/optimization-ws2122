@@ -18,10 +18,14 @@ np_x = fmincon(g2, x0, [], [], [], [], lb, ub);
 np = f2(np_x);
 disp("Nadir Point:" + num2str(np));
 
-weights = get_equidistant_weights(10);
+N = 10; % Number of pareto optimal points
+
+weights = get_equidistant_weights(N);
 options = optimoptions("fmincon", "Display", "off");
 
-for idx = 1:5
+f1_star = zeros(N, 1);
+f2_star = zeros(N, 1);
+for idx = 1:N
     ws_problem = get_ws_problem(f, weights(:,idx), x0, lb, ub, [], options);
     x_star = fmincon(ws_problem);
     f1_star(idx) = f1(x_star);
