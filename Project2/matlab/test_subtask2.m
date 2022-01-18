@@ -24,13 +24,13 @@ np_x2 = fmincon(g2, x0, [], [], [], [], lb, ub, [], options);
 np2 = f2(np_x2);
 disp("Nadir Point:" + num2str([np1, np2]));
 
-N = 100; % Number of pareto optimal points
+N = 10; % Number of pareto optimal points
 
 weights = get_equidistant_weights(N);
 
 f1_star = zeros(N, 1);
 f2_star = zeros(N, 1);
-for idx = 1:N
+for idx = 1:N % use parfor if N>100, Parallel Computing Toolbox required
     ws_problem = get_ws_problem(f, weights(:,idx), x0, lb, ub, [], options);
     x_star = fmincon(ws_problem);
     f1_star(idx) = f1(x_star);
