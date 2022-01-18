@@ -26,7 +26,8 @@ np2 = f2(np_x2);
 np = [np1, np2];
 disp("Nadir Point:" + num2str(np));
 
-extreme_points = [up; np];
+extreme_points = [up1, np1;
+                  np2, up1];
 
 N = 100; % Number of pareto optimal points
 
@@ -54,12 +55,16 @@ end
 
 plot(f1_star, f2_star)
 hold on;
-title("Comparison of Pareto Fronts");
 xlabel("f1");
 ylabel("f2");
 scatter(up1, up2, '*');
 scatter(np1, np2, '*');
-legend("Weighted Sum", "Reference Point", "Eps-Constraint", "Utopia Point", "Nadir Point");
+scatter(up1, np2, '*');
+scatter(np1, up2, '*');
+title("Comparison of Pareto Fronts");
+legend("Weighted Sum", "Reference Point", "Eps-Constraint", ...
+        "Utopia Point", "Nadir Point", ...
+        "Extreme Point 1", "Extreme Point 2");
 
 function obj1 = f1(x)
     a = sqrt(1 + (x(1) + x(2))^2);
