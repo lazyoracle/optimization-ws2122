@@ -33,9 +33,10 @@ N = 100; % Number of pareto optimal points
 
 weights = get_equidistant_weights(N);
 epsilons = get_epsilons(up, np, 2, N);
-refs = get_ref_points(up', extreme_points, N);
+refs = get_ref_points(up', extreme_points, (N/2)+1);
+refs = sortrows(refs', 1)'; % sort ref points so that plotting isn't messed
 
-
+% Calculate Pareto Fronts
 f1_star = zeros(N, 3);
 f2_star = zeros(N, 3);
 for idx = 1:N % use parfor if N>100, Parallel Computing Toolbox required
