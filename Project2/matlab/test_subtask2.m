@@ -54,8 +54,11 @@ for idx = 1:N
     f2_star(idx, 3) = f2(x_star_e);
 end
 
-plot(f1_star, f2_star)
+subplot(3, 1, 1);
 hold on;
+scatter(f1_star(:, 1), f2_star(:, 1), 'o');
+xlim([0.5, 3.5]);
+ylim([0.5, 3.5]);
 xlabel("f1");
 ylabel("f2");
 scatter(up1, up2, '*');
@@ -63,9 +66,26 @@ scatter(np1, np2, '*');
 scatter(up1, np2, '*');
 scatter(np1, up2, '*');
 title("Comparison of Pareto Fronts");
-legend("Weighted Sum", "Reference Point", "Eps-Constraint", ...
+legend("Weighted Sum", ...
         "Utopia Point", "Nadir Point", ...
         "Extreme Point 1", "Extreme Point 2");
+hold off
+
+subplot(3, 1, 2);
+scatter(f1_star(:, 2), f2_star(:, 2), '+');
+xlim([0.5, 3.5]);
+ylim([0.5, 3.5]);
+xlabel("f1");
+ylabel("f2");
+legend("Reference Point");
+
+subplot(3, 1, 3);
+scatter(f1_star(:, 3), f2_star(:, 3), '*');
+xlim([0.5, 3.5]);
+ylim([0.5, 3.5]);
+xlabel("f1");
+ylabel("f2");
+legend("Epsilon Constraint");
 
 function obj1 = f1(x)
     a = sqrt(1 + (x(1) + x(2))^2);
