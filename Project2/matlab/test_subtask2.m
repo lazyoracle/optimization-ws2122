@@ -26,8 +26,7 @@ np2 = f2(np_x2);
 np = [np1, np2];
 disp("Nadir Point:" + num2str(np));
 
-extreme_points = [up1, up2;
-                  np1, np2];
+extreme_points = [up; np];
 
 N = 100; % Number of pareto optimal points
 
