@@ -7,21 +7,26 @@ ub = [1.2, 1.2];
 x0 = [0, 0];
 
 f = {@f1, @f2};
+options = optimoptions("fmincon", "Display", "off");
 
 % utopian point is the min
-up_x = fmincon(@f2, x0, [], [], [], [], lb, ub);
-up = f2(up_x);
-disp("Utopian Point:" + num2str(up));
+up_x1 = fmincon(@f1, x0, [], [], [], [], lb, ub, [], options);
+up1 = f1(up_x1);
+up_x2 = fmincon(@f2, x0, [], [], [], [], lb, ub, [], options);
+up2 = f2(up_x2);
+disp("Utopian Point:" + num2str([up1, up2]));
 % nadir point is the max
+g1 = @(x)-f1(x);
 g2 = @(x)-f2(x);
-np_x = fmincon(g2, x0, [], [], [], [], lb, ub); 
-np = f2(np_x);
-disp("Nadir Point:" + num2str(np));
+np_x1 = fmincon(g1, x0, [], [], [], [], lb, ub, [], options); 
+np1 = f1(np_x1);
+np_x2 = fmincon(g2, x0, [], [], [], [], lb, ub, [], options); 
+np2 = f2(np_x2);
+disp("Nadir Point:" + num2str([np1, np2]));
 
-N = 10; % Number of pareto optimal points
+N = 100; % Number of pareto optimal points
 
 weights = get_equidistant_weights(N);
-options = optimoptions("fmincon", "Display", "off");
 
 f1_star = zeros(N, 1);
 f2_star = zeros(N, 1);
@@ -38,6 +43,8 @@ title("Weighted Sum");
 legend('pareto');
 xlabel("f1");
 ylabel("f2");
+text(up1, up2, "Utopian Point");
+text(np1, np2, "Nadir Point");
 
 function obj1 = f1(x)
     a = sqrt(1 + (x(1) + x(2))^2);
