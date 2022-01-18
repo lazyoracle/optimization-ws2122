@@ -26,6 +26,9 @@ np2 = f2(np_x2);
 np = [np1, np2];
 disp("Nadir Point:" + num2str(np));
 
+extreme_points = [up1, up2;
+                  np1, np2];
+
 N = 100; % Number of pareto optimal points
 
 weights = get_equidistant_weights(N);
