@@ -39,7 +39,7 @@ refs = sortrows(refs', 1)'; % sort ref points so that plotting isn't messed
 % Calculate Pareto Fronts
 f1_star = zeros(N, 3);
 f2_star = zeros(N, 3);
-for idx = 1:N % use parfor if N>100, Parallel Computing Toolbox required
+for idx = 1:N
     ws_problem = get_ws_problem(f, weights(:,idx), x0, lb, ub, [], options);
     x_star_w = fmincon(ws_problem);
     f1_star(idx, 1) = f1(x_star_w);
