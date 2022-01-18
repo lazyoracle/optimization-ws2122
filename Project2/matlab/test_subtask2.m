@@ -15,7 +15,7 @@ up1 = f1(up_x1);
 up_x2 = fmincon(@f2, x0, [], [], [], [], lb, ub, [], options);
 up2 = f2(up_x2);
 up = [up1, up2];
-disp("Utopian Point:" + num2str(up));
+disp("Utopia Point:" + num2str(up));
 % nadir point is the max
 g1 = @(x)-f1(x);
 g2 = @(x)-f2(x);
