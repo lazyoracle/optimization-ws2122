@@ -1,3 +1,6 @@
+clear;
+clearvars;
+
 f1 = @(x)(x(1));
 f2 = @(x)(x(2));
 f = {f1, f2};
