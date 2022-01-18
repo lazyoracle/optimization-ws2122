@@ -33,6 +33,8 @@ N = 100; % Number of pareto optimal points
 
 weights = get_equidistant_weights(N);
 epsilons = get_epsilons(up, np, 2, N);
+refs = get_ref_points(up', extreme_points, N);
+
 
 f1_star = zeros(N, 3);
 f2_star = zeros(N, 3);
@@ -41,20 +43,24 @@ for idx = 1:N % use parfor if N>100, Parallel Computing Toolbox required
     x_star_w = fmincon(ws_problem);
     f1_star(idx, 1) = f1(x_star_w);
     f2_star(idx, 1) = f2(x_star_w);
-    % ref_problem = get_rp_problem(f, )
+    rp_problem = get_rp_problem(f, refs(:,idx), x0, lb, ub, [], options);
+    x_star_r = fmincon(rp_problem);
+    f1_star(idx, 2) = f1(x_star_r);
+    f2_star(idx, 2) = f2(x_star_r);
     ep_problem = get_eps_problem(f, epsilons(idx), x0, lb, ub, [], options);
     x_star_e = fmincon(ep_problem);
-    f1_star(idx, 2) = f1(x_star_e);
-    f2_star(idx, 2) = f2(x_star_e);
+    f1_star(idx, 3) = f1(x_star_e);
+    f2_star(idx, 3) = f2(x_star_e);
 end
 
 plot(f1_star, f2_star)
+hold on;
 title("Comparison of Pareto Fronts");
-legend("Weighted Sum", "Eps-Constraint");
 xlabel("f1");
 ylabel("f2");
-text(up1, up2, "\leftarrow Utopian Point");
-text(np1, np2, "\leftarrow Nadir Point");
+scatter(up1, up2, '*');
+scatter(np1, np2, '*');
+legend("Weighted Sum", "Reference Point", "Eps-Constraint", "Utopia Point", "Nadir Point");
 
 function obj1 = f1(x)
     a = sqrt(1 + (x(1) + x(2))^2);
