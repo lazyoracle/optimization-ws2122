@@ -29,7 +29,7 @@ disp("Nadir Point:" + num2str(np));
 extreme_points = [up1, np1;
                   np2, up1];
 
-N = 100; % Number of pareto optimal points
+N = 5; % Number of pareto optimal points
 
 weights = get_equidistant_weights(N);
 epsilons = get_epsilons(up, np, 2, N);
