@@ -4,7 +4,9 @@ function eps_problem = get_eps_problem(cost_fun, eps, x0, lb, ub, nonlcon, optio
 
     function [c,ceq] = constraint(x)
         c(1) = cost_fun2(x) - eps; % eps-constraint as nonlcon
-        c(2) = nonlcon(x); % nonlcon for the original problem
+        if isempty(nonlcon) == 0
+            c(2) = nonlcon(x); % nonlcon for the original problem
+        end
         ceq = [];
     end
 
