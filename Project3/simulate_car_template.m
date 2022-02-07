@@ -44,14 +44,19 @@ cost = [T, cost_u];
 
 %% Parameterize
 weight = opt.parameter(1);
-opt.set_value(weight, 0.8)
+opt.set_value(weight, 0.9)
 
-opt.minimize(0.2 * cost(1) + 0.8 * cost(2));
+opt.minimize((1 - weight) * 5 * cost(1) + weight * cost(2));
 sol = opt.solve();
 
 x_val = sol.value(x);
 u_val = sol.value(u);
 
+disp("u_cost");
+disp(0.5 * sum(u_val(1,:).^2))
+
+disp("time");
+disp(sol.value(T));
 
 %% Plotting
 subplot(1, 2, 1);
