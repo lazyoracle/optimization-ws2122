@@ -1,7 +1,7 @@
 %% Initialization
 close all
 nNodes        = 20; % number of shooting nodes 
-nSteps        = 10; % number of intermediate multiple shooting steps
+nSteps        = 5; % number of intermediate multiple shooting steps
 T_max         = 20; % max time to reach the goal
 
 %% Setting up the problem
@@ -40,7 +40,7 @@ opt.subject_to(x(4, 1) == 225); % initial angle
 opt.subject_to(x(4, end) == 90); % final angle
 
 %% add cost functions
-cost_u = 0.5 * u(1)^2;
+cost_u = 0.5 * sum(u(1,:).^2);
 cost = [T, cost_u];
 
 opt.minimize(0.2 *cost(1) + 0.5 * cost(2));
