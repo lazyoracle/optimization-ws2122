@@ -44,31 +44,46 @@ cost = [T, cost_u];
 
 %% Parameterize
 weight = opt.parameter(1);
-opt.set_value(weight, 0.9)
 
+%% Cost Function
 opt.minimize((1 - weight) * 5 * cost(1) + weight * cost(2));
-sol = opt.solve();
 
-x_val = sol.value(x);
-u_val = sol.value(u);
+%% Solve Parameterized Multi-Objective OCP
+num_pareto_points = 5; % Set to ~30 for smooth plots
+plot_idx = [1, 2, 5];
+weights = linspace(0, 1, num_pareto_points);
+cost_values = zeros(2, num_pareto_points);
 
-disp("u_cost");
-disp(0.5 * sum(u_val(1,:).^2))
+for idx = 1:num_pareto_points
+    opt.set_value(weight, weights(idx))
+    sol = opt.solve();
+    x_val = sol.value(x);
+    u_val = sol.value(u);
+    cost_values(1, idx) = sol.value(T);
+    cost_values(2, idx) = 0.5 * sum(u_val(1,:).^2);
+    %% Plotting - Single Output
+    if sum(plot_idx==idx)>0
+        figure
+        subplot(1, 2, 1);
+        plot(x_val(1,:), x_val(2,:), 'LineWidth', 2)
+        grid on
+        title("position")
+        
+        subplot(1, 2, 2);
+        stairs(0:sol.value(dt):sol.value(T-dt), u_val', 'LineWidth', 2)
+        legend("$u_1$", "$u_2$", 'Interpreter', 'latex')
+        grid on
+        title("inputs")
+    end
+end
 
-disp("time");
-disp(sol.value(T));
-
-%% Plotting
-subplot(1, 2, 1);
-plot(x_val(1,:), x_val(2,:), 'LineWidth', 2)
+%% Plotting - Pareto Front
+figure
+scatter(cost_values(1, :), cost_values(2, :), '*')
 grid on
-title("position")
-
-subplot(1, 2, 2);
-stairs(0:sol.value(dt):sol.value(T-dt), u_val', 'LineWidth', 2)
-legend("$u_1$", "$u_2$", 'Interpreter', 'latex')
-grid on
-title("inputs")
+xlabel("Time")
+ylabel("Energy")
+title("Pareto Front")
 
 %% ODE Solver
 function x_end = ms_step(x0, u_series, dt)
