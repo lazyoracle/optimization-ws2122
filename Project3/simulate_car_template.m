@@ -1,34 +1,49 @@
 %% Initialization
 close all
-nNodes        = ...; % number of shooting nodes 
-nSteps        = ...; % number of intermediate multiple shooting steps
-T_max         = ...; % max time to reach the goal
+nNodes        = 20; % number of shooting nodes 
+nSteps        = 10; % number of intermediate multiple shooting steps
+T_max         = 20; % max time to reach the goal
 
 %% Setting up the problem
 opt = casadi.Opti();
 opt.solver('ipopt')
 T = opt.variable(1);
 
-x0  = ...;
+x0  = opt.variable(5, 1);
 x   = [x0, opt.variable( 5, nNodes-1 )];
-u   = opt.variable( ..., (nNodes-1) * (nSteps+1) );
+u   = opt.variable( 2, (nNodes-1) * (nSteps+1) );
 dt  = T / ((nNodes-1) * (nSteps+1));
 
 %% setting the equality constraints for dynamics
 for iStep = 1:(nNodes-1)
     initial_step = (nSteps+1) * (iStep-1)+1;
-    opt.subject_to( ms_step(x(:,iStep), u(:, initial_step:(initial_step + nSteps)), dt) == x(:,iStep+1) )
+    opt.subject_to( ms_step(x(:,iStep), ...
+        u(:, initial_step:(initial_step + nSteps)), dt) == x(:,iStep+1) )
 end
 
 %% box constraints
-...
-opt.subject_to( 1 <= T <= T_max )
+opt.subject_to( -45 <= x(5) <=  45);
+opt.subject_to( -20 <= u(2) <= 20);
+opt.subject_to( x(3) >= -0.2);
+opt.subject_to( x(1) <= 7.1);
+opt.subject_to(  -10 <= u(1) <= 5);
+opt.subject_to( 1 <= T <= T_max );
+
+%% boundary constraints
+opt.subject_to(x(1, 1) == 0); % initial x position
+opt.subject_to(x(1, end) == 7); % final x position
+opt.subject_to(x(2, 1) == 0); % initial y position
+opt.subject_to(x(2, end) == 5); % final y position
+opt.subject_to(x(3, 1) == 0); % standing still
+opt.subject_to(x(5, 1) == 0); % wheels are straightened
+opt.subject_to(x(4, 1) == 225); % initial angle
+opt.subject_to(x(4, end) == 90); % final angle
 
 %% add cost functions
-cost_u = ...;
+cost_u = 0.5 * u(1)^2;
 cost = [T, cost_u];
 
-opt.minimize(...);
+opt.minimize(0.2 *cost(1) + 0.5 * cost(2));
 sol = opt.solve();
 
 x_val = sol.value(x);
@@ -36,16 +51,16 @@ u_val = sol.value(u);
 
 
 %% Plotting
-figure
-title("position")
+subplot(1, 2, 1);
 plot(x_val(1,:), x_val(2,:), 'LineWidth', 2)
 grid on
+title("position")
 
-figure
-title("inputs")
+subplot(1, 2, 2);
 stairs(0:sol.value(dt):sol.value(T-dt), u_val', 'LineWidth', 2)
 legend("$u_1$", "$u_2$", 'Interpreter', 'latex')
 grid on
+title("inputs")
 
 %%
 function x_end = ms_step(x0, u_series, dt)
@@ -68,6 +83,10 @@ end
 
 %% ode
 function xdot = robot_ode(x, u)
-    xdot = [...];
+    xdot = [x(3)*cos(x(4) + x(5)), ...
+            x(3)*sin(x(4) + x(5)), ...
+            u(1), ...
+            x(3)*sin(x(5)), ...
+            u(2)];
 end
 
