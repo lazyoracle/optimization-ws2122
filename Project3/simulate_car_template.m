@@ -1,7 +1,7 @@
 %% Initialization
 close all
 nNodes        = 20; % number of shooting nodes 
-nSteps        = 5; % number of intermediate multiple shooting steps
+nSteps        = 3; % number of intermediate multiple shooting steps
 T_max         = 20; % max time to reach the goal
 
 %% Setting up the problem
@@ -22,11 +22,11 @@ for iStep = 1:(nNodes-1)
 end
 
 %% box constraints
-opt.subject_to( -45 <= x(5) <=  45);
-opt.subject_to( -20 <= u(2) <= 20);
-opt.subject_to( x(3) >= -0.2);
-opt.subject_to( x(1) <= 7.1);
-opt.subject_to(  -10 <= u(1) <= 5);
+opt.subject_to( -45 <= x(5, :) <=  45);
+opt.subject_to( -20 <= u(2, :) <= 20);
+opt.subject_to( x(3, :) >= -0.2);
+opt.subject_to( x(1, :) <= 7.1);
+opt.subject_to(  -10 <= u(1, :) <= 5);
 opt.subject_to( 1 <= T <= T_max );
 
 %% boundary constraints
@@ -35,15 +35,18 @@ opt.subject_to(x(1, end) == 7); % final x position
 opt.subject_to(x(2, 1) == 0); % initial y position
 opt.subject_to(x(2, end) == 5); % final y position
 opt.subject_to(x(3, 1) == 0); % standing still
-opt.subject_to(x(5, 1) == 0); % wheels are straightened
-opt.subject_to(x(4, 1) == 225); % initial angle
+opt.subject_to(x(4, 1) == -135); % initial angle
 opt.subject_to(x(4, end) == 90); % final angle
 
 %% add cost functions
 cost_u = 0.5 * sum(u(1,:).^2);
 cost = [T, cost_u];
 
-opt.minimize(0.2 *cost(1) + 0.5 * cost(2));
+%% Parameterize
+weight = opt.parameter(1);
+opt.set_value(weight, 0.8)
+
+opt.minimize(0.2 * cost(1) + 0.8 * cost(2));
 sol = opt.solve();
 
 x_val = sol.value(x);
@@ -62,7 +65,7 @@ legend("$u_1$", "$u_2$", 'Interpreter', 'latex')
 grid on
 title("inputs")
 
-%%
+%% ODE Solver
 function x_end = ms_step(x0, u_series, dt)
 % calculate one multiple shooting step with step size dt
 import casadi.*
