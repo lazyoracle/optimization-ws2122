@@ -9,7 +9,7 @@ opt = casadi.Opti();
 opt.solver('ipopt')
 T = opt.variable(1);
 
-x0  = opt.variable(5, 1);
+x0  = [0; 0; 0; -2.3562; 0]; % provide initial conditions
 x   = [x0, opt.variable( 5, nNodes-1 )];
 u   = opt.variable( 2, (nNodes-1) * (nSteps+1) );
 dt  = T / ((nNodes-1) * (nSteps+1));
@@ -30,13 +30,9 @@ opt.subject_to(  (-10) <= u(1, :) <= 5);
 opt.subject_to( 1 <= T <= T_max );
 
 %% boundary constraints
-opt.subject_to(x(1, 1) == 0); % initial x position
 opt.subject_to(x(1, end) == 7); % final x position
-opt.subject_to(x(2, 1) == 0); % initial y position
 opt.subject_to(x(2, end) == 5); % final y position
-opt.subject_to(x(3, 1) == 0); % standing still at start
 opt.subject_to(x(3, end) == 0); % standing still at end
-opt.subject_to(x(4, 1) == (-2.3562)); % initial angle
 opt.subject_to(x(4, end) == (pi/2)); % final angle
 
 %% add cost functions
