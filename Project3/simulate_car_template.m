@@ -1,6 +1,6 @@
 %% Initialization
 close all
-nNodes        = 100; % number of shooting nodes 
+nNodes        = 30; % number of shooting nodes 
 nSteps        = 1; % number of intermediate multiple shooting steps
 T_max         = 20; % max time to reach the goal
 
@@ -46,8 +46,9 @@ weight = opt.parameter(1);
 opt.minimize(((1 - weight) * cost(1)) + (weight * cost(2)));
 
 %% Solve Parameterized Multi-Objective OCP
-num_pareto_points = 50; % Set to ~30 for smooth plots
-plot_idx = [1, 25, 50];
+num_pareto_points = 30; % Set to ~30 for smooth plots
+mid = num_pareto_points/2;
+plot_idx = [1, mid, num_pareto_points];
 weights = linspace(0, 1, num_pareto_points);
 cost_values = zeros(2, num_pareto_points);
 
@@ -63,6 +64,10 @@ for idx = 1:num_pareto_points
         figure
         subplot(1, 2, 1);
         plot(x_val(1,:), x_val(2,:), 'LineWidth', 2)
+        time_txt = ["Total Time: " num2str(cost_values(1, idx))];
+        energy_txt = ["Total Energy: ", num2str(cost_values(2, idx))];
+        text(5, 4, time_txt);
+        text(5, 1, energy_txt);
         grid on
         title("position")
         
@@ -76,10 +81,14 @@ end
 
 %% Plotting - Pareto Front
 figure
-scatter(cost_values(1, :), cost_values(2, :), '*')
+semilogy(cost_values(1, :), cost_values(2, :))
 grid on
 xlabel("Time")
 ylabel("Energy")
+text(cost_values(1, 1), cost_values(2, 1), "Minimum Time");
+text(cost_values(1, mid), cost_values(2, mid), "Midway between Energy, Time");
+text(cost_values(1, end), cost_values(2, end), "Minimum Energy");
+
 title("Pareto Front")
 
 %% ODE Solver
