@@ -22,11 +22,11 @@ for iStep = 1:(nNodes-1)
 end
 
 %% box constraints
-opt.subject_to( -45 <= x(5, :) <=  45);
-opt.subject_to( -20 <= u(2, :) <= 20);
-opt.subject_to( x(3, :) >= -0.2);
+opt.subject_to( (-pi/4) <= x(5, :) <=  (pi/4));
+opt.subject_to( (-pi/9) <= u(2, :) <= (pi/9));
+opt.subject_to( x(3, :) >= (-0.2));
 opt.subject_to( x(1, :) <= 7.1);
-opt.subject_to(  -10 <= u(1, :) <= 5);
+opt.subject_to(  (-10) <= u(1, :) <= 5);
 opt.subject_to( 1 <= T <= T_max );
 
 %% boundary constraints
@@ -34,9 +34,10 @@ opt.subject_to(x(1, 1) == 0); % initial x position
 opt.subject_to(x(1, end) == 7); % final x position
 opt.subject_to(x(2, 1) == 0); % initial y position
 opt.subject_to(x(2, end) == 5); % final y position
-opt.subject_to(x(3, 1) == 0); % standing still
-opt.subject_to(x(4, 1) == -135); % initial angle
-opt.subject_to(x(4, end) == 90); % final angle
+opt.subject_to(x(3, 1) == 0); % standing still at start
+opt.subject_to(x(3, end) == 0); % standing still at end
+opt.subject_to(x(4, 1) == (-2.3562)); % initial angle
+opt.subject_to(x(4, end) == (pi/2)); % final angle
 
 %% add cost functions
 cost_u = 0.5 * sum(u(1,:).^2);
