@@ -1,7 +1,7 @@
 %% Initialization
 close all
-nNodes        = 20; % number of shooting nodes 
-nSteps        = 3; % number of intermediate multiple shooting steps
+nNodes        = 40; % number of shooting nodes 
+nSteps        = 5; % number of intermediate multiple shooting steps
 T_max         = 20; % max time to reach the goal
 
 %% Setting up the problem
@@ -46,11 +46,11 @@ cost = [T, cost_u];
 weight = opt.parameter(1);
 
 %% Cost Function
-opt.minimize((1 - weight) * 5 * cost(1) + weight * cost(2));
+opt.minimize(((1 - weight) * cost(1)) + (weight * cost(2)));
 
 %% Solve Parameterized Multi-Objective OCP
-num_pareto_points = 5; % Set to ~30 for smooth plots
-plot_idx = [1, 2, 5];
+num_pareto_points = 10; % Set to ~30 for smooth plots
+plot_idx = [1, 5, 10];
 weights = linspace(0, 1, num_pareto_points);
 cost_values = zeros(2, num_pareto_points);
 
