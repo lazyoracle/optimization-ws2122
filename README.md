@@ -7,6 +7,7 @@ Code repository for assignments and projects in the Optimization course at Saarl
 1. [Gradient Based Optimization](assignments/assignment_1/)
 2. [Gradient Free Optimization](assignments/assignment_2/)
 3. [Multi-objective Optimization](assignments/assignment_3/)
+4. [Evolutionary Algorithms](assignments/assignment_4/)
 
 ## Projects
 
