@@ -35,6 +35,15 @@ opt.subject_to(x(2, end) == 5); % final y position
 opt.subject_to(x(3, end) == 0); % standing still at end
 opt.subject_to(x(4, end) == (pi/2)); % final angle
 
+%% Obstacle at (x, y) of radius r
+obstacle_x = 4;
+obstacle_y = 0;
+obstacle_r = 1;
+obstacle_buff = 0.2;
+obstacle_loc = (x(1, :) - obstacle_x).^2 + (x(2, :) - obstacle_y).^2;
+obstacle_constant = ((obstacle_r + obstacle_buff)^2 + zeros(size(x(1,:))));
+opt.subject_to(obstacle_loc >= obstacle_constant) ;
+
 %% add cost functions
 cost_u = 0.5 * sum(u(1,:).^2);
 cost = [T, cost_u];
