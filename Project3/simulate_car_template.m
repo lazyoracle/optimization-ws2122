@@ -71,14 +71,21 @@ for idx = 1:num_pareto_points
     %% Plotting - Single Output
     if sum(plot_idx==idx)>0
         figure
+        hold on
         subplot(1, 2, 1);
         plot(x_val(1,:), x_val(2,:), 'LineWidth', 2)
         time_txt = ["Total Time: " num2str(cost_values(1, idx))];
         energy_txt = ["Total Energy: ", num2str(cost_values(2, idx))];
         text(5, 4, time_txt);
         text(5, 1, energy_txt);
+        
+        viscircles([obstacle_x, obstacle_y], obstacle_r, ...
+                    'Color', 'red', 'LineWidth', 2);
+        viscircles([obstacle_x, obstacle_y], obstacle_r+obstacle_buff, ...
+                    'Color', '#EDB120', 'LineStyle','--');
         grid on
         title("position")
+        hold off
         
         subplot(1, 2, 2);
         stairs(0:sol.value(dt):sol.value(T-dt), u_val', 'LineWidth', 2)
