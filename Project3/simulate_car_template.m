@@ -55,7 +55,7 @@ weight = opt.parameter(1);
 opt.minimize(((1 - weight) * cost(1)) + (weight * cost(2)));
 
 %% Solve Parameterized Multi-Objective OCP
-num_pareto_points = 30; % Set to ~30 for smooth plots
+num_pareto_points = 15; % Set to ~20 for smooth plots
 mid = num_pareto_points/2;
 plot_idx = [1, mid, num_pareto_points];
 weights = linspace(0, 1, num_pareto_points);
