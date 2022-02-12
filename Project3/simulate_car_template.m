@@ -1,6 +1,6 @@
 %% Initialization
 close all
-nNodes        = 30; % number of shooting nodes 
+nNodes        = 60; % number of shooting nodes 
 nSteps        = 1; % number of intermediate multiple shooting steps
 T_max         = 20; % max time to reach the goal
 
